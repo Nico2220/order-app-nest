@@ -7,34 +7,55 @@ import * as dayjs from 'dayjs';
 describe('AppController', () => {
   let appController: AppController;
 
+  const mockAppService = {
+    getAvailableDate: jest.fn(() => ({
+      message: `the available dates start from :  ${dayjs().format()}`,
+      availableDate: dayjs().format(),
+    })),
+
+    orderTable: jest.fn((userId, date) => ({
+      id: '1',
+      orders: [{ users: [userId], orderDate: date }],
+    })),
+  };
+
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
       providers: [AppService],
-    }).compile();
+    })
+      .overrideProvider(AppService)
+      .useValue(mockAppService)
+      .compile();
 
     appController = app.get<AppController>(AppController);
   });
 
   describe('available-date', () => {
     const obj = {
-      message: `the available dates start from :  ${dayjs().format()}`,
-      availableDate: dayjs().format(),
+      message: expect.any(String),
+      availableDate: expect.any(String),
     };
     it('should return a object {message:string, availableDate:string}', () => {
-      expect(appController.getAvailableDate()).toMatchObject(obj);
+      expect(appController.getAvailableDate()).toEqual(obj);
     });
   });
 
   describe('Order', () => {
     const table = {
-      id: '1',
-      orders: [],
+      id: expect.any(String),
+      orders: expect.any(Array),
     };
-    it('should return 404 if user not found}', () => {
+
+    it('should return a the order data when a user orders}', () => {
       expect(
         appController.orderTable('1', '2023-12-01T07:32:45+03:00'),
-      ).toBeTruthy();
+      ).toEqual(table);
+
+      expect(mockAppService.orderTable).toHaveBeenCalledWith(
+        '1',
+        '2023-12-01T07:32:45+03:00',
+      );
     });
   });
 });

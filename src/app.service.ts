@@ -37,9 +37,16 @@ export class AppService {
     const lastOrder = table.orders[table.orders.length - 1];
     const lastOrderDate = lastOrder && dayjs(lastOrder.orderDate);
     if (lastOrderDate == null) {
+      let now = dayjs();
+      const min = now.minute();
+      if (min > 0) {
+        now = now.add(60 - min, 'minute');
+      }
       return {
-        message: `the available dates start from :  ${dayjs().format()}`,
-        availableDate: dayjs().format(),
+        message: `the available dates start from :  ${now.format(
+          'DD-MM-YYYY HH:00',
+        )}`,
+        availableDate: now.format(),
       };
     }
 
@@ -54,7 +61,7 @@ export class AppService {
     if (lastOrder.users.length === 1) {
       return {
         message: `there is one sit left on this table, you can order from ${lastOrderDate.format()}`,
-        availableDate: lastOrderDate.format('YYYY-MM-DD HH:mm'),
+        availableDate: lastOrderDate.format(),
       };
     }
   }
@@ -62,13 +69,17 @@ export class AppService {
   orderTable(userId: string, dateString: string) {
     const lastOrder = table.orders[table.orders.length - 1];
     const date = dateString ? dayjs(dateString) : dayjs();
+
+    if (date.minute() > 0) {
+      throw new BadRequestException('Error Date format');
+    }
+
     if (!this.getUserById(userId)) {
       throw new NotFoundException('User not found');
     }
     if (lastOrder && lastOrder.users.length === 1) {
       if (lastOrder.users.includes(userId)) {
         throw new BadRequestException("You can't sit on both seats");
-        // return res.status(400).json({ error: "You can't sit on both seats" });
       }
 
       lastOrder.users.push(userId);
