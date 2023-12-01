@@ -33,10 +33,6 @@ const table: Table = {
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
-  }
-
   getAvailableDate() {
     const lastOrder = table.orders[table.orders.length - 1];
     const lastOrderDate = lastOrder && dayjs(lastOrder.orderDate);
