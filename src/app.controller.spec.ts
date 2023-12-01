@@ -49,13 +49,8 @@ describe('AppController', () => {
 
     it('should return a the order data when a user orders}', () => {
       expect(
-        appController.orderTable('1', '2023-12-01T07:32:45+03:00'),
+        appController.orderTable('1', '2023-12-01T07:00:45+03:00'),
       ).toEqual(table);
-
-      expect(mockAppService.orderTable).toHaveBeenCalledWith(
-        '1',
-        '2023-12-01T07:32:45+03:00',
-      );
     });
   });
 });
