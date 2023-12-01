@@ -12,8 +12,8 @@ type User = {
 
 const users: User[] = [
   { id: '1', name: 'Jon Doe' },
-  { id: '2', name: 'Tim' },
-  { id: '3', name: 'Tom' },
+  { id: '2', name: 'Tim Ali' },
+  { id: '3', name: 'Tom Eric' },
 ];
 
 type Order = {
