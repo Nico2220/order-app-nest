@@ -3,7 +3,6 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { time } from 'console';
 
 import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
@@ -61,7 +60,7 @@ export class AppService {
     if (lastOrder.users.length === 2) {
       const nextDate = lastOrderDate.add(3, 'hour').format();
       return {
-        message: `The table is full, the available dates start from nowwwww ${nextDate}`,
+        message: `The table is full, the available dates start from ${nextDate}`,
         availableDate: nextDate,
       };
     }
