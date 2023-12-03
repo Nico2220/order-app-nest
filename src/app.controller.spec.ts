@@ -37,10 +37,14 @@ describe('AppController', () => {
     };
     it('should return a object {message:string, availableDate:string}', () => {
       expect(appController.getAvailableDate('Europe/Moscow')).toEqual(obj);
+
+      expect(mockAppService.getAvailableDate).toHaveBeenCalledWith(
+        'Europe/Moscow',
+      );
     });
   });
 
-  describe('Order', () => {
+  describe('orderTable', () => {
     const table = {
       id: expect.any(String),
       orders: expect.any(Array),
